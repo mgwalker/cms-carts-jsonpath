@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <title>CARTS jsonpath test</title>
+    <style type="text/css">
+      input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        font-size: larger;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="text">
+    <pre></pre>
+    <script type="text/javascript" src="built.js" charset="utf-8"></script>
+    <script type="text/javascript">
+      const input = document.querySelector('input[type="text"]');
+      const pre = document.querySelector('pre');
+
+      input.addEventListener('input', ({target:{value}}) => {
+        try {
+          const out = jp.query(data, value);
+          pre.innerHTML = JSON.stringify(out, null, 2);
+        } catch(e) {
+          pre.innerHTML = e.message;
+        }
+      })
+    </script>
+  </body>
+</html>
