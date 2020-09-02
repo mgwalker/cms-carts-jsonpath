@@ -10,21 +10,32 @@
     </style>
   </head>
   <body>
-    <input type="text">
+    <input type="text" />
     <pre></pre>
     <script type="text/javascript" src="built.js" charset="utf-8"></script>
     <script type="text/javascript">
       const input = document.querySelector('input[type="text"]');
-      const pre = document.querySelector('pre');
+      const pre = document.querySelector("pre");
 
-      input.addEventListener('input', ({target:{value}}) => {
+      input.addEventListener("input", ({ target: { value } }) => {
+        location.hash = encodeURIComponent(value);
         try {
           const out = jp.query(data, value);
           pre.innerHTML = JSON.stringify(out, null, 2);
-        } catch(e) {
+        } catch (e) {
           pre.innerHTML = e.message;
         }
-      })
+      });
+
+      if (location.hash) {
+        const hash = location.hash.replace(/^#/, "");
+        if (hash) {
+          const query = decodeURIComponent(hash);
+          input.value = query;
+          input.dispatchEvent(new Event("input"));
+          console.log(`query: ${query}`);
+        }
+      }
     </script>
   </body>
 </html>
