@@ -1,22 +1,18 @@
-const jp1 = require('jsonpath');
-const jp2 = require('@astronautlabs/jsonpath').JSONPath;
+const jsonpath = require('jsonpath');
 const data = require('./data.json');
 
 global.data = data;
-global.jp = jp1;
+global.jp = jsonpath;
 
 const tests = {
-  'jsonpath - very generic': () => {
-    jp1.query(data, `$..*[?(@.id=='2020-01-a-02-01')]`);
+  'very generic': () => {
+    jsonpath.query(data, `$..*[?(@.id=='2020-01-a-02-01')]`);
   },
-  'jsonpath - very specific': () => {
-    jp1.query(data, `$..contents.section.subsections[*].parts[*]..questions[?(@.id=='2020-01-a-02-01')]`);
+  'very specific': () => {
+    jsonpath.query(data, `$..contents.section.subsections[*].parts[*]..questions[?(@.id=='2020-01-a-02-01')]`);
   },
-  '@astronautlabs/jsonpath - very generic': () => {
-    jp2.query(data, `$..*[?(@.id=='2020-01-a-02-01')]`);
-  },
-  '@astronautlabs/jsonpath - very specific': () => {
-    jp2.query(data, `$..contents.section.subsections[*].parts[*]..questions[?(@.id=='2020-01-a-02-01')]`);
+  'pinpoint specific': () => {
+    jsonpath.query(data, `$[0].contents.section.subsections[0].parts[1].questions[0]`);
   }
 }
 
@@ -25,7 +21,8 @@ const runTests = () => {
 
   Object.entries(tests).forEach(([name, test]) => {
     console.time(name);
-    [...Array(50)].forEach(() => {
+
+    [...Array(100)].forEach(() => {
       test();
     });
     console.timeEnd(name);
